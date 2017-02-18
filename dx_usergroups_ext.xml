@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension type="plugin" group="cck_field" version="2.5" method="upgrade">
-	<name>plg_cck_field_jform_usergroups</name>
-	<author>Octopoos</author>
-	<authorEmail>contact@seblod.com</authorEmail>
-	<authorUrl>http://www.seblod.com</authorUrl>
-	<copyright>Copyright (C) 2009 - 2016 SEBLOD. All Rights Reserved.</copyright>
+	<name>plg_cck_field_dx_usergroups_ext</name>
+	<author>Octopoos and Doxadigital</author>
+	<authorEmail>info@doxadigital.com</authorEmail>
+	<authorUrl>http://www.doxadigital.com</authorUrl>
+	<copyright>Copyright (C) 2009 - 2016 SEBLOD/Doxadigital. All Rights Reserved.</copyright>
 	<license>GNU General Public License version 2 or later.</license>
-	<creationDate>January 2011</creationDate>
-	<description>SEBLOD 3.x - www.seblod.com // by Octopoos - www.octopoos.com</description>
-	<version>3.10.0</version>
+	<creationDate>February 2017</creationDate>
+	<description>Fork of default JForm_usergroups to support user group filtering</description>
+	<version>1.0</version>
 	
 	<scriptfile>install/script.php</scriptfile>
 	
@@ -18,16 +18,16 @@
 		<folder>install</folder>
 		<folder>tmpl</folder>
 		
-		<filename plugin="jform_usergroups">jform_usergroups.php</filename>
+		<filename plugin="dx_usergroups_ext">dx_usergroups_ext.php</filename>
 		<filename>index.html</filename>
 	</files>
 	
-	<languages folder="languages">
+<!-- 	<languages folder="languages">
 		<language tag="en-GB">en-GB/en-GB.plg_cck_field_jform_usergroups.ini</language>
 		<language tag="en-GB">en-GB/en-GB.plg_cck_field_jform_usergroups.sys.ini</language>
 		<language tag="fr-FR">fr-FR/fr-FR.plg_cck_field_jform_usergroups.ini</language>
 		<language tag="fr-FR">fr-FR/fr-FR.plg_cck_field_jform_usergroups.sys.ini</language>
-	</languages>
+	</languages> -->
 	
 	<config>
 		<fields name="params" addfieldpath="/libraries/cck/construction/field">
