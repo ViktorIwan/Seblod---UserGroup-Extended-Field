@@ -11,9 +11,9 @@
 defined( '_JEXEC' ) or die;
 
 // Plugin
-class plgCCK_FieldJForm_UserGroups extends JCckPluginField
+class plgCCK_Fielddx_usergroups_ext extends JCckPluginField
 {
-	protected static $type		=	'jform_usergroups';
+	protected static $type		=	'dx_usergroups_ext';
 	protected static $type2		=	'usergroups';
 	protected static $friendly	=	1;
 	protected static $path;

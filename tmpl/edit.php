@@ -17,6 +17,7 @@ defined( '_JEXEC' ) or die;
         <?php
         echo JCckDev::renderForm( 'core_label', $this->item->label, $config );
         echo JCckDev::renderForm( 'core_defaultvalue', $this->item->defaultvalue, $config );
+        echo JCckDev::renderForm( 'core_defaultvalue', @$options2['ugparentID'],  $config, array('label'=>'Parent User ID','storage_field'=>'json[options2][ugparentID]' ) );
 		
         echo JCckDev::renderSpacer( JText::_( 'COM_CCK_STORAGE' ), JText::_( 'COM_CCK_STORAGE_DESC' ) );
 		echo JCckDev::getForm( 'core_storage', $this->item->storage, $config );
