@@ -1,4 +1,4 @@
-Seblod's Icon Field Extended
+User Group Seblod's Field Extended
 ===================
 
 
