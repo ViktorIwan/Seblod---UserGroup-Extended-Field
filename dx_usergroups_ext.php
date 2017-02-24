@@ -63,6 +63,7 @@ class plgCCK_Fielddx_usergroups_ext extends JCckPluginField
 		}
 		self::$path	=	parent::g_getPath( self::$type.'/' );
 		parent::g_onCCK_FieldPrepareForm( $field, $config );
+		$options2		=	JCckDev::fromJSON( $field->options2 );
 		
 		// Init
 		if ( count( $inherit ) ) {
@@ -82,7 +83,7 @@ class plgCCK_Fielddx_usergroups_ext extends JCckPluginField
 		if ( ! is_array( $value ) ) {
 			$value	=	array( $value );
 		}
-		
+
 		// Validate
 		$validate	=	'';
 		if ( $config['doValidation'] > 1 ) {
@@ -92,7 +93,109 @@ class plgCCK_Fielddx_usergroups_ext extends JCckPluginField
 		
 		// Prepare
 		$class	=	( $field->css ) ? ' class="'.$field->css.'"' : '';
-		$form	=	JHtml::_( 'access.usergroups', $name, $value);		// JForm UserGroups ?!
+
+		//CHECK ELIGIBLE USERGROUP
+        if($options2['ugparentID']!='') {
+            $db = &JFactory::getDbo();
+            $db->setQuery(
+                'SELECT node.id
+	FROM #__usergroups AS node,
+        #__usergroups AS parent
+WHERE node.lft BETWEEN parent.lft AND parent.rgt
+        AND parent.id = ' . $options2['ugparentID'] . '
+ORDER BY node.lft'
+            );
+            $validug = $db->loadAssocList();
+            $ug = array();
+            foreach ($validug as $key => $valueKey) {
+                if($field->bool4==false){
+                    if($validug[$key]['id']==$options2['ugparentID'] ){
+                       continue;
+                    }
+                }
+                array_push($ug, $validug[$key]['id']);
+            }
+        }
+       		//END CHECKING
+
+		if($field->bool3==0){
+	    	$form	=	JHtml::_( 'access.usergroups', $name, $value);		// JForm UserGroups ?!
+            if($options2['ugparentID']!='') {
+                //Clearing Up Things
+
+                $dom = new DOMDocument();
+
+                //avoid the whitespace after removing the node
+                $dom->preserveWhiteSpace = false;
+
+                //parse html dom elements
+                $dom->loadHTML($form);
+
+                $items = $dom->getElementsByTagName('input');
+                $deleteid = Array();
+                $validid = Array();
+                for ($i = 0; $i < $items->length; $i++) {
+                    $valueID = $items->item($i)->getAttribute('value');
+                    if (!in_array($valueID, $ug)) {
+                        array_push($deleteid, $i);
+                    } else {
+                        array_push($validid, $i);
+                    }
+                }
+
+                do {
+                    for ($i = 0; $i < $items->length; $i++) {
+                        $valueID = $items->item($i)->getAttribute('value');
+                        if (!in_array($valueID, $ug)) {
+                            $classname="control-group";
+                            $xpath = new DOMXPath($dom);
+                            $results = $xpath->query("//*[@class='" . $classname . "']");
+                            $deleteNode = $results->item($i);
+                            $deleteNode->parentNode->removeChild($deleteNode);
+                            break;
+                        }
+                    }
+                } while ($items->length != count($validid));
+                $form = $dom->saveHTML();
+            }
+		}else{
+			$form= JHtml::_( 'access.usergroup', $name, $value,'',false);		// JForm UserGroups ?!
+            if($options2['ugparentID']!='') {
+                //Clearing Up Things
+
+                $dom = new DOMDocument();
+
+                //avoid the whitespace after removing the node
+                $dom->preserveWhiteSpace = false;
+
+                //parse html dom elements
+                $dom->loadHTML($form);
+
+                $items = $dom->getElementsByTagName('option');
+                $deleteid = Array();
+                $validid = Array();
+                for ($i = 0; $i < $items->length; $i++) {
+                    $valueID = $items->item($i)->getAttribute('value');
+                    if (!in_array($valueID, $ug)) {
+                        array_push($deleteid, $i);
+                    } else {
+                        array_push($validid, $i);
+                    }
+                }
+
+                do {
+                    for ($i = 0; $i < $items->length; $i++) {
+                        $valueID = $items->item($i)->getAttribute('value');
+                        if (!in_array($valueID, $ug)) {
+                            $deleteNode = $items->item($i);
+                            $deleteNode->parentNode->removeChild($deleteNode);
+                            break;
+                        }
+                    }
+                } while ($items->length != count($validid));
+                $form = $dom->saveHTML();
+            }
+		}
 		$form	=	'<div id="'.$name.'"'.$class.'>'.$form.'</div>';
 
 		// Set
